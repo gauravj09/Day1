@@ -5,69 +5,63 @@
 using namespace std;
 
 /*
-    Referenced from GeeksforGeeks
+Two Stack Solution
+
+Approach: Maintain a minStack which keeps track of minimum value for each push operation. 
+Run-time Complexity: O(1)
+
 */
 
-class SpecialStack 
+class specialStack
 {
+    public:
+        int minimumElement;
+        stack<int> myStack;
+        stack<int> minStack;
 
-public:
-    int minimumElement;
-    stack<int> myStack;
-
-    //Prints out the minimum Element unless stack is empty
-    void getMin()
-    {
-        if (myStack.empty())
-            cout<<"Stack is empty";
-        else    
-            cout<<minimumElement<<endl;
-    }
-
-    void pop()
-    {
-        if(myStack.empty())
-            cout<<"Stack is empty";
-        
-        int top = myStack.top();
-        myStack.pop();
-        
-        if(top < minimumElement)    
-            minimumElement = 2*minimumElement - top;
-        else
-            cout<<top;
-    }
-
-    void peek()
-    {
-        if(myStack.empty())
-            cout<<"Stack is empty";
-        
-        int top = myStack.top();
-
-        if(top < minimumElement)
-            cout<<minimumElement;
-        else
-            cout<<top;
-    }
-
-    void push(int x)
-    {
-        if(myStack.empty)
+        void push(int element)
         {
-            minimumElement = x;
-            myStack.push(x);
+            myStack.push(element);
+
+            if(minStack.empty()) 
+                minStack.push(element);
+
+            else
+                minStack.top() > myStack.top() ? minStack.push(element) : minStack.push(minStack.top());
+        
             return;
         }
 
-        if(x < minimumElement)
+        int pop()
         {
-            myStack.push(2*x - minimumElement);
-            minimumElement = x;
+            int top = myStack.top();
+            minStack.pop();
+            myStack.pop();
+
+            return top;
+        }
+        
+        bool isEmpty()
+        {
+            return myStack.empty();
         }
 
-        else
-            myStack.push(x);
-    }
+        int getMin()
+        {
+            return minStack.top();
+        }
 
 };
+
+/* Driver program to test SpecialStack methods */
+int main() 
+{ 
+    specialStack s; 
+    s.push(10); 
+    s.push(20); 
+    s.push(30); 
+    cout<<s.getMin()<<endl; 
+    s.push(5); 
+    cout<<s.getMin()<<endl; 
+    return 0; 
+}
